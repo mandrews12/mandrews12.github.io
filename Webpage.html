@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profiles</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #dbebf5;
+      display: flex; /* Add flex display */
+    }
+
+    .user-profiles {
+      flex: 1; /* Take up 50% of the screen */
+      padding: 20px;
+    }
+
+    .iframe-container {
+      flex: 1; /* Take up 50% of the screen */
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    h2 {
+      color: #555;
+    }
+
+    h4 {
+      color: #777;
+    }
+
+    span {
+      color: #000;
+      font-weight: bold;
+    }
+
+    img {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-profiles">
+    <h1>User Profiles</h1>
+
+    <div id="user1">
+      <h2>User 1</h2>
+      <button id="getUser1Info">Get Info</button>
+      <h4 id="user1Name" type="text">Name: </h4>
+      <h4 id="user1Age" type="text">Age: </h4>
+      <h4 id="user1Country" type="text">Country: </h4>
+      <h4 id="user1Hobby" type="text">Hobby: </h4>
+      <img id="user1Image" src="" alt="User 1 Profile Image">
+    </div>
+
+    <div id="user2">
+      <h2>User 2</h2>
+      <button id="getUser2Info">Get Info</button>
+      <h4 id="user2Name" type="text">Name: </h4>
+      <h4 id="user2Age" type="text">Age: </h4>
+      <h4 id="user2Country" type="text">Country: </h4>
+      <h4 id="user2Hobby" type="text">Hobby: </h4>
+      <img id="user2Image" src="" alt="User 2 Profile Image">
+    </div>
+  </div>
+
+  <div class="iframe-container">
+    <iframe src="https://thunkable.site/w/f2VmKCEFuNdkuJ3qzQ-0J" title="Chop Down the Tree Thunkable App" height="1000" width="500"></iframe>
+  </div>
+</body>
+</html>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCTUwhNAF71Rv3FcbMl8Q6S6NpfEf922Y4",
+      authDomain: "authentication-app-2930a.firebaseapp.com",
+      databaseURL: "https://authentication-app-2930a-default-rtdb.firebaseio.com",
+      projectId: "authentication-app-2930a",
+      storageBucket: "authentication-app-2930a.appspot.com",
+      messagingSenderId: "1077814775356",
+      appId: "1:1077814775356:web:08317b04e7987cbe70bd39",
+      measurementId: "G-YZZKRDXXWE"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // Import the functions you need from the SDKs you need
+    import {getDatabase, set, get, update, remove, ref, child} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const db = getDatabase();
+
+    //user IDs
+    const user1 = "KZqUxLxTTkd2HSNthPz2EbfyDjn1";
+    const user2 = "yC8Nc3uRu4gs20IZ0uAcebP5MhJ3";
+
+    // user 1 profile info
+    const user1Name = document.querySelector("#user1Name");
+    const user1Age = document.querySelector("#user1Age");
+    const user1Country = document.querySelector("#user1Country");
+    const user1Hobby = document.querySelector("#user1Hobby");
+    const user1Image = document.querySelector("#user1Image");
+
+    // user 2 profile info
+    const user2Name = document.querySelector("#user2Name");
+    const user2Age = document.querySelector("#user2Age");
+    const user2Country = document.querySelector("#user2Country");
+    const user2Hobby = document.querySelector("#user2Hobby");
+    const user2Image = document.querySelector("#user2Image");
+
+    // get info buttons
+    const getUser1Info = document.querySelector("#getUser1Info");
+    const getUser2Info = document.querySelector("#getUser2Info");
+
+    // function to get data from the database for user 1 and display it
+    function getData1() {
+      const dbref = ref(db);
+
+      get(child(dbref, user1))
+      .then((snapshot) => {
+        if(snapshot.exists()) {
+          user1Name.innerHTML = "Name: " + snapshot.val().name;
+          user1Age.innerHTML = "Age: " + snapshot.val().age;
+          user1Country.innerHTML = "Country: " + snapshot.val().country;
+          user1Hobby.innerHTML = "Hobby: " + snapshot.val().hobby;
+          user1Image.src = snapshot.val().image;
+        } else {
+          alert("No data available");
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    }
+
+    // function to get data from the database for user 2 and display it
+    function getData2() {
+      const dbref = ref(db);
+
+      get(child(dbref, user2))
+        .then((snapshot) => {
+          if(snapshot.exists()) {
+            user2Name.innerHTML = "Name: " + snapshot.val().name;
+            user2Age.innerHTML = "Age: " + snapshot.val().age;
+            user2Country.innerHTML = "Country: " + snapshot.val().country;
+            user2Hobby.innerHTML = "Hobby: " + snapshot.val().hobby;
+            user2Image.src = snapshot.val().image;
+          } else {
+            alert("No data available");
+          }
+        })
+        .catch((error) => {
+          alert(error);
+      });
+
+    }
+
+    // event listeners for the buttons
+    getUser1Info.addEventListener('click', getData1);
+    getUser2Info.addEventListener('click', getData2);
+
+  </script>
+
+</body>
+</html>
